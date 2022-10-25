@@ -1,12 +1,12 @@
-import { Home } from "./pages/Home";
-import { Popular } from "./pages/Home/Most/Popular";
-import { Header } from "./pages/Layout/Header";
+import { BrowserRouter } from 'react-router-dom'
+import { Router } from './Router'
 
 export function App() {
   return (
     <div className="bg-background p-4">
-      <Header />
-      <Home />
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
   )
 }

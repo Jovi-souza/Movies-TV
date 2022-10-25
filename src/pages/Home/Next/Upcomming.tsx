@@ -20,7 +20,7 @@ export function Upcomming() {
   const carousel = useRef<HTMLDivElement>(null)
 
   async function GetMovies() {
-    const response = await api.get(`upcoming${ApiKey}`)
+    const response = await api.get(`/movie/upcoming${ApiKey}`)
     const results = response.data.results
     setMovies(results)
   }

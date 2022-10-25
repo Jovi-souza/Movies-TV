@@ -20,7 +20,7 @@ export function Popular() {
   const carousel = useRef<HTMLDivElement>(null)
 
   async function GetMovies() {
-    const response = await api.get(`popular${ApiKey}`)
+    const response = await api.get(`/movie/popular${ApiKey}`)
     const results = response.data.results
     setMovies(results)
   }

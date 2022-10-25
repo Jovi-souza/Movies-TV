@@ -20,7 +20,7 @@ export function TopRated() {
   const carousel = useRef<HTMLDivElement>(null)
 
   async function GetMovies() {
-    const response = await api.get(`top_rated${ApiKey}`)
+    const response = await api.get(`/movie/top_rated${ApiKey}`)
     const results = response.data.results
     setMovies(results)
   }
@@ -31,7 +31,7 @@ export function TopRated() {
   }, [])
 
   return(
-    <div className="w-full mx-auto flex flex-col gap-4 overflow-hidden">
+    <div className="w-full mx-auto flex flex-col gap-4 overflow-hidden justify-center">
       <h1 className="text-yellow-500 text-xl">Top Rated</h1>
       <motion.div 
         ref={carousel} 
@@ -39,7 +39,7 @@ export function TopRated() {
         whileTap={{cursor: "grabbing"}}
       >
         <motion.div
-          className="flex gap-6 w-max items-center justify-center"
+          className="flex gap-6 w-max h-full justify-center items-center"
           drag="x"
           dragConstraints={{right: 0, left: -width}}
         >
