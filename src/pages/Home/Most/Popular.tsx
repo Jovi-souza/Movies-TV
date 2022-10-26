@@ -1,11 +1,12 @@
-import { MovieCard } from "../../../Components/MovieCard"
-import {motion} from 'framer-motion'
-import { useEffect, useRef, useState } from "react"
-import { ApiKey } from "../../../lib/APIkey"
-import { api } from "../../../lib/axios"
+/* eslint-disable camelcase */
+import { MovieCard } from '../../../Components/MovieCard'
+import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { ApiKey } from '../../../lib/APIkey'
+import { api } from '../../../lib/axios'
 
 interface moviesType {
-  id: number
+  id: string
   title: string
   overview: string
   poster_path: string
@@ -26,35 +27,48 @@ export function Popular() {
   }
 
   useEffect(() => {
-    setWidth(Number(carousel.current?.scrollWidth) - Number(carousel.current?.offsetWidth))
+    setWidth(
+      Number(carousel.current?.scrollWidth) -
+        Number(carousel.current?.offsetWidth),
+    )
     GetMovies()
   }, [])
 
-  return(
+  return (
     <div className="w-full mx-auto flex flex-col gap-4 overflow-hidden">
       <h1 className="text-yellow-500 text-xl">Most Popular</h1>
-      <motion.div 
-        ref={carousel} 
-        className="cursor-grab w-full" 
-        whileTap={{cursor: "grabbing"}}
+      <motion.div
+        ref={carousel}
+        className="cursor-grab w-full"
+        whileTap={{ cursor: 'grabbing' }}
       >
         <motion.div
           className="flex gap-6 w-max items-center justify-center"
           drag="x"
-          dragConstraints={{right: 0, left: -width}}
+          dragConstraints={{ right: 0, left: -width }}
         >
-          {movies.map(({id, release_date, title, vote_average, vote_count, poster_path}) => {
-            return(
-              <MovieCard 
-                key={id}
-                title={title}
-                vote_count={vote_count}
-                vote_average={vote_average}
-                poster_path={poster_path}
-                release_date={release_date}
-              />
-            )
-          })}
+          {movies.map(
+            ({
+              id,
+              release_date,
+              title,
+              vote_average,
+              vote_count,
+              poster_path,
+            }) => {
+              return (
+                <MovieCard
+                  key={id}
+                  title={title}
+                  vote_count={vote_count}
+                  vote_average={vote_average}
+                  poster_path={poster_path}
+                  release_date={release_date}
+                  id={id}
+                />
+              )
+            },
+          )}
         </motion.div>
       </motion.div>
     </div>

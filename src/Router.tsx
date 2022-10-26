@@ -5,12 +5,12 @@ import { Series } from './pages/Series'
 import { TvShow } from './pages/TvShow'
 
 export function Router() {
-  return(
-    <Routes> 
-      <Route path='/' element={<DefaultLayout />}>
-        <Route path='/Home' element={<Home />}/>
-        <Route path='/TV Show' element={<TvShow />}/>
-        <Route path='/Series' element={<Series />}/>
+  return (
+    <Routes>
+      <Route path="/" element={<DefaultLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/TV Show" element={<TvShow />} />
+        <Route path="/Series" element={<Series />} />
       </Route>
     </Routes>
   )

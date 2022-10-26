@@ -7,10 +7,10 @@ import { api } from '../../../lib/axios'
 
 interface moviesType {
   id: string
-  title: string
+  name: string
   overview: string
   poster_path: string
-  release_date: string
+  first_air_date: string
   vote_average: number
   vote_count: number
 }
@@ -21,7 +21,7 @@ export function TopRated() {
   const carousel = useRef<HTMLDivElement>(null)
 
   async function GetMovies() {
-    const response = await api.get(`/movie/top_rated${ApiKey}`)
+    const response = await api.get(`/tv/top_rated${ApiKey}`)
     const results = response.data.results
     setMovies(results)
   }
@@ -50,8 +50,8 @@ export function TopRated() {
           {movies.map(
             ({
               id,
-              release_date,
-              title,
+              name,
+              first_air_date,
               vote_average,
               vote_count,
               poster_path,
@@ -59,11 +59,11 @@ export function TopRated() {
               return (
                 <MovieCard
                   key={id}
-                  title={title}
+                  title={name}
                   vote_count={vote_count}
                   vote_average={vote_average}
                   poster_path={poster_path}
-                  release_date={release_date}
+                  release_date={first_air_date}
                   id={id}
                 />
               )

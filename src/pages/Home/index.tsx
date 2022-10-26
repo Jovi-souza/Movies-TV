@@ -1,9 +1,9 @@
-import { Popular } from "./Most/Popular";
-import { TopRated } from "./Top/Rated";
-import { Upcomming } from "./Next/Upcomming";
+import { Popular } from './Most/Popular'
+import { TopRated } from './Top/Rated'
+import { Upcomming } from './Next/Upcomming'
 
 export function Home() {
-  return(
+  return (
     <div className="flex flex-col gap-8 mt-4 justify-center items-center">
       <Popular />
       <TopRated />
