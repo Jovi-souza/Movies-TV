@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { ApiKey } from '../../../lib/APIkey'
 import { api } from '../../../lib/axios'
+import { CaretRight, CaretLeft } from 'phosphor-react'
 
 interface moviesType {
   id: string
@@ -17,7 +18,6 @@ interface moviesType {
 
 export function Popular() {
   const [movies, setMovies] = useState<moviesType[]>([])
-  const [width, setWidth] = useState(0)
   const carousel = useRef<HTMLDivElement>(null)
 
   async function GetMovies() {
@@ -27,26 +27,33 @@ export function Popular() {
   }
 
   useEffect(() => {
-    setWidth(
-      Number(carousel.current?.scrollWidth) -
-        Number(carousel.current?.offsetWidth),
-    )
     GetMovies()
   }, [])
 
+  function handleLeftClick() {
+    console.log(carousel.current?.offsetWidth)
+  }
+  function handleRightClick() {
+    console.log(carousel.current?.offsetWidth)
+    Number(carousel.current?.scrollLeft) += Number(
+      carousel.current?.offsetWidth,
+    )
+  }
+
   return (
-    <div className="w-full mx-auto flex flex-col gap-4 overflow-hidden">
+    <div className="w-full">
       <h1 className="text-yellow-500 text-xl">Most Popular</h1>
       <motion.div
         ref={carousel}
-        className="cursor-grab w-full"
-        whileTap={{ cursor: 'grabbing' }}
+        className="flex overflow-x-auto overflow-y-hidden scroll-smooth"
       >
-        <motion.div
-          className="flex gap-6 w-max items-center justify-center"
-          drag="x"
-          dragConstraints={{ right: 0, left: -width }}
-        >
+        <motion.div className="flex gap-6 relative">
+          <CaretLeft
+            size={20}
+            color="white"
+            className="sticky left-0 top-1/2"
+            onClick={handleLeftClick}
+          />
           {movies.map(
             ({
               id,
@@ -69,6 +76,12 @@ export function Popular() {
               )
             },
           )}
+          <CaretRight
+            size={20}
+            color="white"
+            className="sticky right-2 top-1/2"
+            onClick={handleRightClick}
+          />
         </motion.div>
       </motion.div>
     </div>

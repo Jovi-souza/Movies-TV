@@ -25,7 +25,7 @@ export function MovieCard({
       <img
         src={`${path}${poster_path}`}
         alt="Movie image"
-        className="rounded h-90"
+        className="rounded w-full h-full object-cover"
         onClick={teste}
         id={id}
       />
