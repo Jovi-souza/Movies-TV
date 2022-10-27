@@ -5,10 +5,6 @@ import { api } from '../lib/axios'
 interface childrenType {
   children: ReactNode
 }
-interface genresType {
-  id: number
-  name: string
-}
 
 interface MovieDetailsType {
   title: string
@@ -16,24 +12,22 @@ interface MovieDetailsType {
   poster_path: string
   release_date: string
   original_language: string
-  genres: genresType[]
 }
 
 interface DetailsContextType {
   GetMovieDetails: (id: string) => void
   GetTvDetails: (id: string) => void
-  movieDetails: MovieDetailsType[]
+  movieDetails: MovieDetailsType
 }
 
 export const DetailsContext = createContext({} as DetailsContextType)
 export function DetailsContextProvider({ children }: childrenType) {
-  const [movieDetails, setMovieDetails] = useState<MovieDetailsType[]>([])
+  const [movieDetails, setMovieDetails] = useState({} as MovieDetailsType)
 
   async function GetMovieDetails(id: string) {
     const response = await api.get(`/movie/${id}${ApiKey}`)
     const result = await response.data
     setMovieDetails(result)
-    console.log(result)
   }
 
   async function GetTvDetails(id: string) {

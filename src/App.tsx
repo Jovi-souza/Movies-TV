@@ -4,7 +4,7 @@ import { Router } from './Router'
 
 export function App() {
   return (
-    <div className="bg-background p-4">
+    <div className="bg-background p-4 h-full">
       <BrowserRouter>
         <DetailsContextProvider>
           <Router />

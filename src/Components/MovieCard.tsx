@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { NavLink } from 'react-router-dom'
 import { DetailsContext } from '../context/detailsContext'
 
 /* eslint-disable camelcase */
@@ -28,13 +29,15 @@ export function MovieCard({
 
   return (
     <div className="text-gray-100 w-60">
-      <img
-        src={`${path}${poster_path}`}
-        alt="Movie image"
-        className="rounded w-full h-96 object-cover"
-        id={id}
-        onClick={handleGetMovieDetails}
-      />
+      <NavLink to="/Info">
+        <img
+          src={`${path}${poster_path}`}
+          alt="Movie image"
+          className="rounded w-full h-96 object-cover"
+          id={id}
+          onClick={handleGetMovieDetails}
+        />
+      </NavLink>
       <span className="text-xs text-gray-400">{release_date}</span>
       <h1 className="text-xs font-semibold">{title}</h1>
       <div className="flex justify-between">
