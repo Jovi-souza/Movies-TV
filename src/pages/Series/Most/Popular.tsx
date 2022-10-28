@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import { MovieCard } from '../../../Components/MovieCard'
 import { useEffect, useState } from 'react'
 import { ApiKey } from '../../../lib/APIkey'
 import { api } from '../../../lib/axios'
 import { ArrowFatLineLeft, ArrowFatLineRight } from 'phosphor-react'
+import { SerieCard } from '../Serie/Card'
 
 interface moviesType {
   id: string
@@ -56,7 +56,7 @@ export function Popular() {
               poster_path,
             }) => {
               return (
-                <MovieCard
+                <SerieCard
                   key={id}
                   title={name}
                   vote_count={vote_count}

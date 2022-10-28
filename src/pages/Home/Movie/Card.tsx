@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { DetailsContext } from '../context/detailsContext'
+import { DetailsContext } from '../../../context/detailsContext'
 
 /* eslint-disable camelcase */
 interface CardTypes {
@@ -22,7 +22,7 @@ export function MovieCard({ poster_path, title, vote_average, id }: CardTypes) {
 
   return (
     <div className="flex flex-col text-gray-100 w-32  overflow-hidden sm:w-44 xl:w-60">
-      <NavLink to="/Info">
+      <NavLink to="Info">
         <img
           src={`${path}${poster_path}`}
           alt="Movie image"

@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
-import { MovieCard } from '../../../Components/MovieCard'
+
 import { useEffect, useState } from 'react'
 import { ApiKey } from '../../../lib/APIkey'
 import { api } from '../../../lib/axios'
 import { ArrowFatLineLeft, ArrowFatLineRight } from 'phosphor-react'
+import { MovieCard } from '../Movie/Card'
 
 interface moviesType {
   id: string
@@ -34,9 +35,7 @@ export function Popular() {
     async function GetMovies() {
       const response = await api.get(`/movie/popular${ApiKey}&page=${page}`)
       const results = response.data.results
-      const pages = response.data.page
       setMovies(results)
-      console.log(pages)
     }
 
     GetMovies()
