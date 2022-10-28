@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { MovieCard } from '../../../Components/MovieCard'
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { ApiKey } from '../../../lib/APIkey'
 import { api } from '../../../lib/axios'
@@ -22,6 +21,7 @@ export function Popular() {
     const response = await api.get(`/movie/popular${ApiKey}`)
     const results = response.data.results
     setMovies(results)
+    console.log(results)
   }
 
   useEffect(() => {
@@ -29,10 +29,10 @@ export function Popular() {
   }, [])
 
   return (
-    <div className="w-full">
-      <h1 className="text-yellow-500 text-xl">Most Popular</h1>
-      <motion.div className="flex overflow-x-auto overflow-y-hidden scroll-smooth">
-        <motion.div className="flex gap-6 ">
+    <div>
+      <h1 className="text-yellow-500">Most Popular</h1>
+      <div>
+        <div className="flex gap-2 flex-wrap justify-center md:gap-4 xl:gap-6">
           {movies.map(
             ({
               id,
@@ -55,8 +55,8 @@ export function Popular() {
               )
             },
           )}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
   )
 }

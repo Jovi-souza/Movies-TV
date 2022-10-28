@@ -12,14 +12,7 @@ interface CardTypes {
   id: string
 }
 
-export function MovieCard({
-  poster_path,
-  release_date,
-  title,
-  vote_average,
-  vote_count,
-  id,
-}: CardTypes) {
+export function MovieCard({ poster_path, title, vote_average, id }: CardTypes) {
   const { GetMovieDetails } = useContext(DetailsContext)
   const path = 'https://image.tmdb.org/t/p/w500'
 
@@ -28,22 +21,23 @@ export function MovieCard({
   }
 
   return (
-    <div className="text-gray-100 w-60">
+    <div className="flex flex-col text-gray-100 w-32  overflow-hidden sm:w-44 xl:w-60">
       <NavLink to="/Info">
         <img
           src={`${path}${poster_path}`}
           alt="Movie image"
-          className="rounded w-full h-96 object-cover"
+          className="rounded w-full h-48 sm:h-max"
           id={id}
           onClick={handleGetMovieDetails}
         />
       </NavLink>
-      <span className="text-xs text-gray-400">{release_date}</span>
-      <h1 className="text-xs font-semibold">{title}</h1>
-      <div className="flex justify-between">
-        <p>{vote_average}/10</p>
-        <p>{vote_count}</p>
-      </div>
+      <h1 className="text-xs font-semibold w-max sm:text-sm md:text-base lg:text-lg">
+        {title}
+      </h1>
+      <p className="flex justify-between text-xs md:text-sm">
+        <span className="text-blue-500 font-extrabold">TMDB</span>
+        {vote_average}/10
+      </p>
     </div>
   )
 }

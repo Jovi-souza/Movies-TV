@@ -9,14 +9,14 @@ export function Info() {
   const path = 'https://image.tmdb.org/t/p/w500'
 
   return (
-    <div className="flex gap-16 pt-7">
+    <div className="">
       <div>
-        <img src={`${path}${poster_path}`} alt="Title" className="w-max" />
+        <img src={`${path}${poster_path}`} alt="Title" className="" />
       </div>
-      <div className="flex flex-col gap-8">
-        <h1 className="text-gray-100 text-5xl">{title}</h1>
-        <p className=" text-gray-400 text-2xl">{overview}</p>
-        <div className="flex gap-4 text-gray-500">
+      <div className="f">
+        <h1 className="text-gray-100 ">{title}</h1>
+        <p className=" text-gray-400 ">{overview}</p>
+        <div className="flex text-gray-500">
           <span>{release_date}</span>
           <span className="uppercase">{original_language}</span>
         </div>
