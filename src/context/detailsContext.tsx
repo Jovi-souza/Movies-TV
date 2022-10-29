@@ -20,31 +20,29 @@ interface DetailsType {
   vote_count: number
 }
 
-// interface SerieDetailsType {
-//   title: string
-//   overview: string
-//   poster_path: string
-//   release_date: string
-//   original_language: string
-//   revenue: number
-//   budget: number
-//   runtime: number
-//   status: string
-//   vote_average: number
-//   vote_count: number
-// }
+interface SerieDetailsType {
+  name: string
+  overview: string
+  first_air_date: string
+  poster_path: string
+  number_of_episodes: number
+  number_of_seasons: number
+  status: string
+  vote_average: number
+  vote_count: number
+}
 
 interface DetailsContextType {
   GetMovieDetails: (id: string) => void
   GetTvDetails: (id: string) => void
   movieDetails: DetailsType
-  seriesDetails: DetailsType
+  seriesDetails: SerieDetailsType
 }
 
 export const DetailsContext = createContext({} as DetailsContextType)
 export function DetailsContextProvider({ children }: childrenType) {
   const [movieDetails, setMovieDetails] = useState({} as DetailsType)
-  const [seriesDetails, setSeriesDetails] = useState({} as DetailsType)
+  const [seriesDetails, setSeriesDetails] = useState({} as SerieDetailsType)
 
   async function GetMovieDetails(id: string) {
     const response = await api.get(`/movie/${id}${ApiKey}`)
