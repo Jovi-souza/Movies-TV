@@ -1,14 +1,14 @@
 import { BrowserRouter } from 'react-router-dom'
-import { DetailsContextProvider } from './context/detailsContext'
+import { MoviesContextProvider } from './context/moviesContext'
 import { Router } from './Router'
 
 export function App() {
   return (
-    <div className="bg-background p-4 h-max">
+    <div className="px-4">
       <BrowserRouter>
-        <DetailsContextProvider>
+        <MoviesContextProvider>
           <Router />
-        </DetailsContextProvider>
+        </MoviesContextProvider>
       </BrowserRouter>
     </div>
   )
