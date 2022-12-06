@@ -4,7 +4,7 @@ import { Router } from './Router'
 
 export function App() {
   return (
-    <div className="px-4">
+    <div>
       <BrowserRouter>
         <MoviesContextProvider>
           <Router />
