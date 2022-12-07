@@ -35,10 +35,14 @@ interface MoviesProps {
 
 interface MoviesContextType {
   movies: MoviesProps[]
-  TopRatedMovies: MoviesProps[]
   moviesdetails: MovieDetailsProps
-  GetMovieDetails: (id: number) => void
+  TopRatedMovies: MoviesProps[]
+  similar: MoviesProps[]
+  page: number
   SearchMovies: (query: string) => void
+  GetMovieDetails: (id: number) => void
+  GetSimilarMovies: (id: number) => void
+  GetMoviesCredits: (id: number) => void
   NextPage: () => void
   PreviousPage: () => void
 }
@@ -47,8 +51,9 @@ export const MoviesContext = createContext({} as MoviesContextType)
 
 export function MoviesContextProvider({ children }: childrenType) {
   const [movies, setMovies] = useState<MoviesProps[]>([])
-  const [TopRatedMovies, setTopRatedMovies] = useState<MoviesProps[]>([])
+  const [similar, setSimilar] = useState<MoviesProps[]>([])
   const [moviesdetails, setMoviesDetails] = useState({} as MovieDetailsProps)
+  const [TopRatedMovies, setTopRatedMovies] = useState<MoviesProps[]>([])
   const [page, setPage] = useState(1)
 
   async function GetTopRatedMovies() {
@@ -58,24 +63,27 @@ export function MoviesContextProvider({ children }: childrenType) {
   }
 
   async function GetMovieDetails(id: number) {
-    const response = await api.get(`/movie/`, {
-      params: {
-        ApiKey,
-        id,
-      },
-    })
-    const results = response.data
-    setMoviesDetails(results)
+    const response = await api.get(`/movie/${id}${ApiKey}`)
+    const detailsResults = response.data
+    setMoviesDetails(detailsResults)
+  }
+
+  async function GetSimilarMovies(id: number) {
+    const response = await api.get(`/movie/${id}/similar${ApiKey}`)
+    const data = response.data.results.slice(0, 10)
+    setSimilar(data)
+  }
+
+  async function GetMoviesCredits(id: number) {
+    const response = await api.get(`/movie/${id}/credits${ApiKey}`)
+    const data = response.data.cast.slice(0, 10)
+    console.log('teste', data)
   }
 
   async function SearchMovies(query: string) {
-    const response = await api.get(`/movie/popular$`, {
-      params: {
-        ApiKey,
-        query,
-      },
-    })
+    const response = await api.get(`search/movie${ApiKey}&query=${query}`)
     const results = response.data.results
+
     setMovies(results)
   }
 
@@ -94,7 +102,6 @@ export function MoviesContextProvider({ children }: childrenType) {
     async function GetMovies() {
       const response = await api.get(`/movie/popular${ApiKey}&page=${page}`)
       const results = response.data.results
-      console.log(response.data.page)
       setMovies(results)
     }
     GetMovies()
@@ -104,12 +111,16 @@ export function MoviesContextProvider({ children }: childrenType) {
     <MoviesContext.Provider
       value={{
         movies,
-        moviesdetails,
-        GetMovieDetails,
         TopRatedMovies,
+        moviesdetails,
+        similar,
+        page,
+        SearchMovies,
+        GetSimilarMovies,
+        GetMovieDetails,
+        GetMoviesCredits,
         NextPage,
         PreviousPage,
-        SearchMovies,
       }}
     >
       {children}

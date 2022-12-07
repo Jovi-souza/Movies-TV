@@ -1,17 +1,59 @@
 import { useContext } from 'react'
 import { MovieCard } from '../../components/card'
 import { MoviesContext } from '../../context/moviesContext'
+import { useForm } from 'react-hook-form'
+import * as zod from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowLeft, ArrowRight } from 'phosphor-react'
+
+const searchFormSchema = zod.object({
+  query: zod.string(),
+})
+
+type FormInput = zod.infer<typeof searchFormSchema>
 
 export function Home() {
-  const { movies, TopRatedMovies, NextPage, PreviousPage } =
+  const { register, handleSubmit, reset } = useForm<FormInput>({
+    resolver: zodResolver(searchFormSchema),
+  })
+  const { movies, TopRatedMovies, NextPage, PreviousPage, SearchMovies, page } =
     useContext(MoviesContext)
 
   const path = 'https://image.tmdb.org/t/p/w500/'
+  function handleSearchForm(data: FormInput) {
+    SearchMovies(data.query)
+    reset()
+  }
 
   return (
     <div>
+      <form
+        onSubmit={handleSubmit(handleSearchForm)}
+        className="flex flex-col items-center gap-4 my-8 text-center md:flex-row lg:text-left lg:ml-5"
+      >
+        <input
+          type="text"
+          className="w-full max-w-xs px-4 py-2 text-white text-sm bg-transparent rounded-full border border-blue-500 outline-none"
+          placeholder="Pesquisa"
+          {...register('query')}
+        />
+        <div className="flex gap-4 justify-center text-white font-semibold">
+          <button
+            onClick={PreviousPage}
+            className="bg-blue-500 p-2 rounded-full"
+          >
+            <ArrowLeft />
+          </button>
+          <span className="ont-bold border-b-2 border-blue-500 px-4">
+            {page}
+          </span>
+          <button onClick={NextPage} className="bg-blue-500 p-2 rounded-full">
+            <ArrowRight />
+          </button>
+        </div>
+      </form>
       <div className="grid lg:grid-cols-[750px_minmax(200px,_1fr)_10px] justify-center">
-        <div className="flex flex-wrap gap-2 justify-center items-center lg:gap-4">
+        <div className="flex flex-wrap gap-[3%] gap-y-4 justify-center items-center md:gap-[1%] lg:gap-4">
           {movies.map((item) => {
             return (
               <MovieCard
@@ -51,20 +93,6 @@ export function Home() {
             })}
           </div>
         </div>
-      </div>
-      <div className="flex gap-4 justify-center my-6">
-        <button
-          onClick={PreviousPage}
-          className="bg-blue-500 text-white font-semibold px-2 rounded"
-        >
-          previous
-        </button>
-        <button
-          onClick={NextPage}
-          className="bg-blue-500 text-white font-semibold px-2 rounded"
-        >
-          Next
-        </button>
       </div>
     </div>
   )
