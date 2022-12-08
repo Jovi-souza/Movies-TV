@@ -3,20 +3,20 @@ import { useContext } from 'react'
 import { MoviesContext } from '../context/moviesContext'
 import { Calendar, Clock, Star, Flag } from 'phosphor-react'
 import { MovieCard } from './card'
-import { NavLink, useParams } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { Path } from '../utils/imagesPath'
+import { CastCard } from './cast'
 
 export function MovieDetails() {
-  const { moviesdetails, similar } = useContext(MoviesContext)
-  const { name } = useParams()
-  const path = 'https://image.tmdb.org/t/p/w500/'
+  const { moviesdetails, similar, cast } = useContext(MoviesContext)
   return (
     <div className="flex flex-col gap-8 max-w-4xl m-auto">
       <NavLink to="/" className="bg-blue-500 text-white w-max rounded px-2">
-        {name}
+        back
       </NavLink>
       <div className="flex gap-4">
         <img
-          src={`${path}${moviesdetails?.poster_path}`}
+          src={`${Path}${moviesdetails?.poster_path}`}
           alt="movie poster"
           className="w-28 h-max object-cover"
         />
@@ -88,8 +88,20 @@ export function MovieDetails() {
             </div>
           </div>
           <div className="flex flex-col gap-4 bg-gray-900 text-white px-4 py-2 rounded">
-            <h1 className="text-xl">Elenco</h1>
-            <div className="flex overflow-hidden"></div>
+            <h1 className="text-xl">Cast</h1>
+            <div className="flex gap-4 overflow-x-scroll">
+              {cast.map((item) => {
+                return (
+                  <CastCard
+                    key={item.id}
+                    name={item.name}
+                    character={item.character}
+                    knownForDepartment={item.known_for_department}
+                    profilePath={item.profile_path}
+                  />
+                )
+              })}
+            </div>
           </div>
           <div className="flex flex-col gap-4 bg-gray-900 text-white px-4 py-2 rounded">
             <h1 className="text-xl">Similar Movies</h1>

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import * as zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft, ArrowRight } from 'phosphor-react'
+import { Path } from '../../utils/imagesPath'
 
 const searchFormSchema = zod.object({
   query: zod.string(),
@@ -19,7 +20,6 @@ export function Home() {
   const { movies, TopRatedMovies, NextPage, PreviousPage, SearchMovies, page } =
     useContext(MoviesContext)
 
-  const path = 'https://image.tmdb.org/t/p/w500/'
   function handleSearchForm(data: FormInput) {
     SearchMovies(data.query)
     reset()
@@ -75,7 +75,7 @@ export function Home() {
               return (
                 <div key={item.id} className="flex gap-4">
                   <img
-                    src={`${path}${item.poster_path}`}
+                    src={`${Path}${item.poster_path}`}
                     alt="Poster movie"
                     className="w-14 h-14 object-cover rounded"
                   />

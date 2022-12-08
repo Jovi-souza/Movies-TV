@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { ApiKey } from '../lib/APIkey'
+import { ApiKey } from '../utils/APIkey'
 import { api } from '../lib/axios'
 
 interface childrenType {
@@ -24,6 +24,14 @@ interface MovieDetailsProps {
   }[]
 }
 
+interface CastProps {
+  id: number
+  name: string
+  character: string
+  profile_path: string
+  known_for_department: string
+}
+
 interface MoviesProps {
   id: number
   poster_path: string
@@ -38,6 +46,7 @@ interface MoviesContextType {
   moviesdetails: MovieDetailsProps
   TopRatedMovies: MoviesProps[]
   similar: MoviesProps[]
+  cast: CastProps[]
   page: number
   SearchMovies: (query: string) => void
   GetMovieDetails: (id: number) => void
@@ -52,6 +61,7 @@ export const MoviesContext = createContext({} as MoviesContextType)
 export function MoviesContextProvider({ children }: childrenType) {
   const [movies, setMovies] = useState<MoviesProps[]>([])
   const [similar, setSimilar] = useState<MoviesProps[]>([])
+  const [cast, setCast] = useState<CastProps[]>([])
   const [moviesdetails, setMoviesDetails] = useState({} as MovieDetailsProps)
   const [TopRatedMovies, setTopRatedMovies] = useState<MoviesProps[]>([])
   const [page, setPage] = useState(1)
@@ -78,6 +88,7 @@ export function MoviesContextProvider({ children }: childrenType) {
     const response = await api.get(`/movie/${id}/credits${ApiKey}`)
     const data = response.data.cast.slice(0, 10)
     console.log('teste', data)
+    setCast(data)
   }
 
   async function SearchMovies(query: string) {
@@ -114,6 +125,7 @@ export function MoviesContextProvider({ children }: childrenType) {
         TopRatedMovies,
         moviesdetails,
         similar,
+        cast,
         page,
         SearchMovies,
         GetSimilarMovies,
