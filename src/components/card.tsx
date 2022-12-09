@@ -21,18 +21,16 @@ export function MovieCard({
   vote_count,
   id,
 }: MoviesProps) {
-  const { GetMovieDetails, GetSimilarMovies, GetMoviesCredits } =
-    useContext(MoviesContext)
+  const { GetMovieDetails, GetMoviesCredits } = useContext(MoviesContext)
   function handleGetMovieData() {
     GetMovieDetails(id)
-    GetSimilarMovies(id)
     GetMoviesCredits(id)
   }
 
   return (
     <div className="flex flex-col text-white w-[31%] md:w-[24%] lg:w-[22%]">
       <div className="relative">
-        <NavLink to={title} onClick={handleGetMovieData}>
+        <NavLink to={`info/${title}`} onClick={handleGetMovieData}>
           <img src={`${Path}${poster_path}`} alt="Movie logo" />
         </NavLink>
         <div className="absolute left-1 bottom-1 text-xs px-4 rounded bg-gray-500 bg-opacity-60">

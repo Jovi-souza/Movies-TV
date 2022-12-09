@@ -1,11 +1,14 @@
 import { useContext } from 'react'
-import { MovieCard } from '../../components/card'
-import { MoviesContext } from '../../context/moviesContext'
 import { useForm } from 'react-hook-form'
+
 import * as zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowLeft, ArrowRight } from 'phosphor-react'
+
+import { MovieCard } from '../../components/card'
+import { MoviesContext } from '../../context/moviesContext'
 import { Path } from '../../utils/imagesPath'
+
+import { ArrowLeft, ArrowRight, House } from 'phosphor-react'
 
 const searchFormSchema = zod.object({
   query: zod.string(),
@@ -14,22 +17,25 @@ const searchFormSchema = zod.object({
 type FormInput = zod.infer<typeof searchFormSchema>
 
 export function Home() {
+  const { movies, page, NextPage, PreviousPage, BackToHome, TopRatedMovies } =
+    useContext(MoviesContext)
+
   const { register, handleSubmit, reset } = useForm<FormInput>({
     resolver: zodResolver(searchFormSchema),
   })
-  const { movies, TopRatedMovies, NextPage, PreviousPage, SearchMovies, page } =
-    useContext(MoviesContext)
 
   function handleSearchForm(data: FormInput) {
-    SearchMovies(data.query)
+    // SearchMovies(data.query)
     reset()
   }
 
+  const pageCount = page === 1 ? 'hidden' : ''
+
   return (
-    <div>
+    <div className="flex flex-col gap-8">
       <form
         onSubmit={handleSubmit(handleSearchForm)}
-        className="flex flex-col items-center gap-4 my-8 text-center md:flex-row lg:text-left lg:ml-5"
+        className="flex flex-col items-center gap-4 text-center md:flex-row lg:text-left lg:ml-5"
       >
         <input
           type="text"
@@ -37,24 +43,13 @@ export function Home() {
           placeholder="Pesquisa"
           {...register('query')}
         />
-        <div className="flex gap-4 justify-center text-white font-semibold">
-          <button
-            onClick={PreviousPage}
-            className="bg-blue-500 p-2 rounded-full"
-          >
-            <ArrowLeft />
-          </button>
-          <span className="ont-bold border-b-2 border-blue-500 px-4">
-            {page}
-          </span>
-          <button onClick={NextPage} className="bg-blue-500 p-2 rounded-full">
-            <ArrowRight />
-          </button>
-        </div>
+        <button className="bg-blue-500 p-2 rounded-full">
+          <House onClick={BackToHome} color="white" weight="bold" />
+        </button>
       </form>
       <div className="grid lg:grid-cols-[750px_minmax(200px,_1fr)_10px] justify-center">
         <div className="flex flex-wrap gap-[3%] gap-y-4 justify-center items-center md:gap-[1%] lg:gap-4">
-          {movies.map((item) => {
+          {movies?.map((item) => {
             return (
               <MovieCard
                 key={item.id}
@@ -70,8 +65,8 @@ export function Home() {
         </div>
         <div className="hidden flex-col rounded lg:flex">
           <div className="flex flex-col gap-4 px-4">
-            <h1 className="text-white text-2xl font-semibold">Destaques</h1>
-            {TopRatedMovies.map((item) => {
+            <h1 className="text-white text-2xl font-semibold">Top Rated</h1>
+            {TopRatedMovies?.map((item) => {
               return (
                 <div key={item.id} className="flex gap-4">
                   <img
@@ -93,6 +88,28 @@ export function Home() {
             })}
           </div>
         </div>
+      </div>
+      <div className="flex gap-4 items-center justify-center text-white font-semibold">
+        <button
+          onClick={PreviousPage}
+          className={`${pageCount} bg-blue-500 p-2 rounded-full`}
+        >
+          <ArrowLeft size={12} weight="bold" />
+        </button>
+        <span
+          className={`${pageCount} font-semibold text-xs text-gray-300 border-b`}
+        >
+          {page - 1}
+        </span>
+        <span className="font-bold border-b-2 border-blue-500 px-2">
+          {page}
+        </span>
+        <span className="font-semibold text-xs text-gray-300 border-b">
+          {page + 1}
+        </span>
+        <button onClick={NextPage} className="bg-blue-500 p-2 rounded-full">
+          <ArrowRight size={12} weight="bold" />
+        </button>
       </div>
     </div>
   )

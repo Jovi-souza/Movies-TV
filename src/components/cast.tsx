@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { Path } from '../utils/imagesPath'
+import Profile from '../assets/profile.png'
 
 interface ProfileProps {
   name: string
@@ -14,10 +15,14 @@ export function CastCard({
   name,
   profilePath,
 }: ProfileProps) {
+  const profileImage = `${Path}${profilePath}`
   return (
     <div className="flex flex-col text-white">
       <div className="relative">
-        <img src={`${Path}${profilePath}`} alt="Movie logo" />
+        <img
+          src={`${profilePath === null ? Profile : profileImage}`}
+          alt="Movie logo"
+        />
         <div className="absolute left-1 bottom-1 text-xs px-4 rounded bg-gray-500 bg-opacity-60">
           {knownForDepartment}
         </div>
