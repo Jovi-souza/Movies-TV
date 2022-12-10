@@ -17,15 +17,24 @@ const searchFormSchema = zod.object({
 type FormInput = zod.infer<typeof searchFormSchema>
 
 export function Home() {
-  const { movies, page, NextPage, PreviousPage, BackToHome, TopRatedMovies } =
-    useContext(MoviesContext)
+  const {
+    page,
+    NextPage,
+    PreviousPage,
+    BackToHome,
+    SearchMovies,
+
+    movies,
+    topRated,
+    isFetching,
+  } = useContext(MoviesContext)
 
   const { register, handleSubmit, reset } = useForm<FormInput>({
     resolver: zodResolver(searchFormSchema),
   })
 
   function handleSearchForm(data: FormInput) {
-    // SearchMovies(data.query)
+    SearchMovies(data.query)
     reset()
   }
 
@@ -47,6 +56,7 @@ export function Home() {
           <House onClick={BackToHome} color="white" weight="bold" />
         </button>
       </form>
+      {isFetching && <p>Loading...</p>}
       <div className="grid lg:grid-cols-[750px_minmax(200px,_1fr)_10px] justify-center">
         <div className="flex flex-wrap gap-[3%] gap-y-4 justify-center items-center md:gap-[1%] lg:gap-4">
           {movies?.map((item) => {
@@ -66,7 +76,7 @@ export function Home() {
         <div className="hidden flex-col rounded lg:flex">
           <div className="flex flex-col gap-4 px-4">
             <h1 className="text-white text-2xl font-semibold">Top Rated</h1>
-            {TopRatedMovies?.map((item) => {
+            {topRated?.map((item) => {
               return (
                 <div key={item.id} className="flex gap-4">
                   <img

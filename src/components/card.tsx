@@ -21,16 +21,15 @@ export function MovieCard({
   vote_count,
   id,
 }: MoviesProps) {
-  const { GetMovieDetails, GetMoviesCredits } = useContext(MoviesContext)
-  function handleGetMovieData() {
-    GetMovieDetails(id)
-    GetMoviesCredits(id)
+  const { getId } = useContext(MoviesContext)
+  function handleGetId() {
+    getId(id)
   }
 
   return (
     <div className="flex flex-col text-white w-[31%] md:w-[24%] lg:w-[22%]">
       <div className="relative">
-        <NavLink to={`info/${title}`} onClick={handleGetMovieData}>
+        <NavLink to={`info/${title}`} onClick={handleGetId}>
           <img src={`${Path}${poster_path}`} alt="Movie logo" />
         </NavLink>
         <div className="absolute left-1 bottom-1 text-xs px-4 rounded bg-gray-500 bg-opacity-60">

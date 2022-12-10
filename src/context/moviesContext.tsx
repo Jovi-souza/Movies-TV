@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState } from 'react'
-import { ApiKey } from '../utils/APIkey'
+import { apiKey } from '../utils/APIkey'
 import { api } from '../lib/axios'
 import { useQuery } from 'react-query'
 
@@ -44,12 +44,13 @@ interface MoviesProps {
 
 interface MoviesContextType {
   movies: MoviesProps[] | undefined
-  TopRatedMovies: MoviesProps[] | undefined
-  moviesdetails: MovieDetailsProps
-  cast: CastProps[]
+  topRated: MoviesProps[] | undefined
+  movieDetails: MovieDetailsProps | undefined
+  cast: CastProps[] | undefined
   page: number
-  GetMovieDetails: (id: number) => void
-  GetMoviesCredits: (id: number) => void
+  isFetching: boolean
+  getId: (id: number) => void
+  SearchMovies: (query: string) => void
   BackToHome: () => void
   NextPage: () => void
   PreviousPage: () => void
@@ -58,43 +59,71 @@ interface MoviesContextType {
 export const MoviesContext = createContext({} as MoviesContextType)
 
 export function MoviesContextProvider({ children }: childrenType) {
-  const [cast, setCast] = useState<CastProps[]>([])
-  const [moviesdetails, setMoviesDetails] = useState({} as MovieDetailsProps)
   const [page, setPage] = useState(1)
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
+  const [id, setId] = useState<number | null>(null)
 
-  const { data: movies } = useQuery<MoviesProps[]>(
-    'topRatedMovies',
+  const getId = (id: number) => {
+    setId(id)
+  }
+
+  const { data: movies, isFetching } = useQuery<MoviesProps[]>(
+    ['movies', page, searchQuery],
     async () => {
-      const response = await api.get(`/movie/popular${ApiKey}&page=${page}`)
-      return response.data.results.slice(0, 10)
+      if (searchQuery) {
+        const { data } = await api.get(
+          `search/movie?api_key=${apiKey}&query=${searchQuery}&page=${page}`,
+        )
+        return data.results
+      }
+
+      const { data } = await api.get(
+        `/movie/popular?api_key=${apiKey}&page=${page}`,
+      )
+      return data.results
+    },
+    {
+      staleTime: 1000 * 60 * 15, // 15 minutos
     },
   )
 
-  const { data: TopRatedMovies } = useQuery<MoviesProps[]>(
+  const { data: topRated } = useQuery<MoviesProps[]>(
     'topRatedMovies',
     async () => {
-      const response = await api.get(`/movie/top_rated${ApiKey}`)
-      return response.data.results.slice(0, 10)
+      const { data } = await api.get(`/movie/top_rated?api_key=${apiKey}`)
+      return data.results.slice(0, 10)
     },
   )
 
-  async function GetMovieDetails(id: number) {
-    const response = await api.get(`/movie/${id}${ApiKey}`)
-    const detailsResults = response.data
-    setMoviesDetails(detailsResults)
+  const { data: movieDetails } = useQuery<MovieDetailsProps>(
+    ['moviesDetails', id],
+    async () => {
+      const { data } = await api.get(`/movie/${id}?api_key=${apiKey}`)
+      return data
+    },
+    {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 15, // 15 minutos
+    },
+  )
+
+  const { data: cast } = useQuery<CastProps[]>(
+    ['cast', id],
+    async () => {
+      const { data } = await api.get(`/movie/${id}/credits?api_key=${apiKey}`)
+      const castResult = data.cast.slice(0, 10)
+      return castResult
+    },
+    {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 15, // 15 minutos
+      cacheTime: 1000 * 60 * 15,
+    },
+  )
+
+  function SearchMovies(query: string) {
+    setSearchQuery(query)
   }
-
-  async function GetMoviesCredits(id: number) {
-    const response = await api.get(`/movie/${id}/credits${ApiKey}`)
-    const data = response.data.cast.slice(0, 10)
-    setCast(data)
-  }
-
-  // async function SearchMovies(query: string) {
-  //   const response = await api.get(`search/movie${ApiKey}&query=${query}`)
-  //   const results = response.data.results
-
-  // }
 
   function BackToHome() {
     setPage((state) => (state = 1))
@@ -115,12 +144,13 @@ export function MoviesContextProvider({ children }: childrenType) {
     <MoviesContext.Provider
       value={{
         movies,
-        moviesdetails,
-        TopRatedMovies,
+        topRated,
+        movieDetails,
+        isFetching,
         cast,
         page,
-        GetMovieDetails,
-        GetMoviesCredits,
+        getId,
+        SearchMovies,
         NextPage,
         PreviousPage,
         BackToHome,
