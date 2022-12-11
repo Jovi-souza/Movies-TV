@@ -59,8 +59,8 @@ interface MoviesContextType {
 export const MoviesContext = createContext({} as MoviesContextType)
 
 export function MoviesContextProvider({ children }: childrenType) {
-  const [page, setPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
+  const [page, setPage] = useState(1)
   const [id, setId] = useState<number | null>(null)
 
   const getId = (id: number) => {
@@ -117,7 +117,6 @@ export function MoviesContextProvider({ children }: childrenType) {
     {
       enabled: !!id,
       staleTime: 1000 * 60 * 15, // 15 minutos
-      cacheTime: 1000 * 60 * 15,
     },
   )
 

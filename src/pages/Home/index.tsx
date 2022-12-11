@@ -9,6 +9,7 @@ import { MoviesContext } from '../../context/moviesContext'
 import { Path } from '../../utils/imagesPath'
 
 import { ArrowLeft, ArrowRight, House } from 'phosphor-react'
+import { Loading } from '../../components/loading'
 
 const searchFormSchema = zod.object({
   query: zod.string(),
@@ -41,7 +42,7 @@ export function Home() {
   const pageCount = page === 1 ? 'hidden' : ''
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 relative">
       <form
         onSubmit={handleSubmit(handleSearchForm)}
         className="flex flex-col items-center gap-4 text-center md:flex-row lg:text-left lg:ml-5"
@@ -56,7 +57,7 @@ export function Home() {
           <House onClick={BackToHome} color="white" weight="bold" />
         </button>
       </form>
-      {isFetching && <p>Loading...</p>}
+      {isFetching && <Loading />}
       <div className="grid lg:grid-cols-[750px_minmax(200px,_1fr)_10px] justify-center">
         <div className="flex flex-wrap gap-[3%] gap-y-4 justify-center items-center md:gap-[1%] lg:gap-4">
           {movies?.map((item) => {
