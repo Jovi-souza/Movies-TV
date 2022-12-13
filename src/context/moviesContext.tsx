@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState } from 'react'
-import { apiKey } from '../utils/APIkey'
 import { api } from '../lib/axios'
+import { apiKey } from '../utils/APIkey'
 import { useQuery } from 'react-query'
 
 interface childrenType {
