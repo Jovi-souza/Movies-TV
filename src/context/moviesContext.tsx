@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react'
 import { api } from '../lib/axios'
-import { apiKey } from '../utils/APIkey'
 import { useQuery } from 'react-query'
+import { apiKey } from '../utils/apiKey'
 
 interface childrenType {
   children: ReactNode
@@ -59,7 +59,7 @@ interface MoviesContextType {
 export const MoviesContext = createContext({} as MoviesContextType)
 
 export function MoviesContextProvider({ children }: childrenType) {
-  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined)
+  const [query, setQuery] = useState<string | undefined>(undefined)
   const [page, setPage] = useState(1)
   const [id, setId] = useState<number | null>(null)
 
@@ -68,18 +68,25 @@ export function MoviesContextProvider({ children }: childrenType) {
   }
 
   const { data: movies, isFetching } = useQuery<MoviesProps[]>(
-    ['movies', page, searchQuery],
+    ['movies', page, query],
     async () => {
-      if (searchQuery) {
-        const { data } = await api.get(
-          `search/movie?api_key=${apiKey}&query=${searchQuery}&page=${page}`,
-        )
+      if (query) {
+        const { data } = await api.get(`search/movie`, {
+          params: {
+            api_key: apiKey,
+            query,
+            page,
+          },
+        })
         return data.results
       }
 
-      const { data } = await api.get(
-        `/movie/popular?api_key=${apiKey}&page=${page}`,
-      )
+      const { data } = await api.get(`/movie/popular`, {
+        params: {
+          api_key: apiKey,
+          page,
+        },
+      })
       return data.results
     },
     {
@@ -121,7 +128,8 @@ export function MoviesContextProvider({ children }: childrenType) {
   )
 
   function SearchMovies(query: string) {
-    setSearchQuery(query)
+    setQuery(query)
+    setPage(1)
   }
 
   function BackToHome() {
