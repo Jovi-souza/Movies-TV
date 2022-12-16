@@ -23,10 +23,8 @@
 
 :heavy_check_mark: Tabela de Filmes.
 
-:heavy_check_mark: TAbela de Series de TV.
-
 :heavy_check_mark: É possivel acessar as informações do filme que você desejar.
 
 ## Layout :dash:
 
-<img src="https://user-images.githubusercontent.com/102324315/198849835-611a0723-88c2-4d7f-a2b8-1da33a5f525c.svg" />
+<img src="https://user-images.githubusercontent.com/102324315/208204185-8a5db730-7a12-489c-8e6a-a35dd73a5297.png" />
